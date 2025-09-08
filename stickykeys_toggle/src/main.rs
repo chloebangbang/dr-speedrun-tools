@@ -12,6 +12,7 @@ use rodio::{self, Source};
 fn main() {
     let sticky_keys: *mut STICKYKEYS = Box::into_raw(Box::new(STICKYKEYS{cbSize: 8, dwFlags: Accessibility::STICKYKEYS_FLAGS(0)}));
     unsafe {
+        // Gets the current state of sticky keys and records it in the sticky keys object above
         let _ = SystemParametersInfoA(
         WindowsAndMessaging::SPI_GETSTICKYKEYS,
             8,
@@ -21,6 +22,7 @@ fn main() {
         
         (*sticky_keys).dwFlags.0 ^= 1;
 
+        // Toggles sticky keys 
         let _ = SystemParametersInfoA(
             WindowsAndMessaging::SPI_SETSTICKYKEYS,
             8,
@@ -37,10 +39,12 @@ fn main() {
         let d = rodio::source::SineWave::new(1174.66)
             .take_duration(std::time::Duration::from_millis(75))
             .amplify(0.1);
+        // Descending bloops
         if (*sticky_keys).dwFlags.0 % 2 == 0 {
             mixer.add(d);
             std::thread::sleep(std::time::Duration::from_millis(75));
             mixer.add(g);
+        // Ascending bloops
         } else {
             mixer.add(g);
             std::thread::sleep(std::time::Duration::from_millis(75));

@@ -6,8 +6,3 @@ edition = "2024"
 [dependencies]
 windows = { version = "0.61", features = ["Win32_UI_WindowsAndMessaging", "Win32_UI_Accessibility"] }
 rodio = "0.21"
-
-[profile.release]
-lto = "fat"
-panic = "abort"
-strip = "symbols"
