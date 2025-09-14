@@ -1,0 +1,9 @@
+[package]
+name = "shared"
+version = "0.1.0"
+edition = "2024"
+description = "Code shared between each of these projects"
+
+[dependencies]
+dirs = "6"
+log = "0.4"

@@ -1,3 +1,7 @@
 [workspace]
 resolver = "3"
-members = ["stickykeys_toggle"]
+members = [ "ralsei-quiz-tracker", "shared", "stickykeys_toggle" ]
+
+[profile.release]
+lto = "fat"
+strip = "symbols"
