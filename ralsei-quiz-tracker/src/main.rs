@@ -28,6 +28,5 @@ fn main() {
     loop {
         tracker.save_obs_files();
         tracker.update(rx.recv().unwrap());
-        dbg!(&tracker);
     }
 }

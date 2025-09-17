@@ -224,12 +224,27 @@ impl Tracker {
 
     /// Saves temp files containing the visually required information for OBS
     pub fn save_obs_files(&self) {
-        shared::file::write_temp_file("board_timeloss", format!("{}f", self.get_current_timeloss().to_string()));
-        shared::file::write_temp_file("total_timeloss", format!("{}f", self.get_total_timeloss().to_string()));
-        shared::file::write_temp_file("ralsei1", self.get_current_answer1().and_then(|x| Some( x.to_string() ) ).unwrap_or(String::from(" ")));
-        shared::file::write_temp_file("ralsei2", self.get_current_answer2().and_then(|x| Some( x.to_string() ) ).unwrap_or(String::from(" ")));
-        shared::file::write_temp_file("ralsei3", self.get_current_answer3().and_then(|x| Some( x.to_string() ) ).unwrap_or(String::from(" ")));
-        shared::file::write_temp_file("board_chance", format!("{:.2}%", self.get_percent_chance()));
+        let (timeloss_s, timeloss_cs) = shared::time::frames_to_secs(self.get_current_timeloss());
+        shared::file::write_temp_file("board_timeloss.txt", format!("{}.{}s", timeloss_s, timeloss_cs));
+
+        // write the timeloss string
+        let (d, h, m, s, cs) = shared::time::frames_to_dhms(self.get_total_timeloss());
+        let timeloss_buf: String;
+        if d != 0 {
+            timeloss_buf = format!("{}d {}h {}m {}.{}s", d, h, m, s, cs);
+        } else if  h != 0 {
+            timeloss_buf = format!("{}h {}m {}.{}s",h, m, s, cs);
+        } else if m != 0 {
+            timeloss_buf = format!("{}m {}.{}s", m, s, cs);
+        } else {
+            timeloss_buf = format!("{}.{}s", s, cs);
+        }
+
+        shared::file::write_temp_file("total_timeloss.txt", timeloss_buf);
+        shared::file::write_temp_file("ralsei1.txt", self.get_current_answer1().and_then(|x| Some( x.to_string() ) ).unwrap_or(String::from(" ")));
+        shared::file::write_temp_file("ralsei2.txt", self.get_current_answer2().and_then(|x| Some( x.to_string() ) ).unwrap_or(String::from(" ")));
+        shared::file::write_temp_file("ralsei3.txt", self.get_current_answer3().and_then(|x| Some( x.to_string() ) ).unwrap_or(String::from(" ")));
+        shared::file::write_temp_file("board_chance.txt", format!("{:.2}%", self.get_percent_chance()));
     }
 }
 

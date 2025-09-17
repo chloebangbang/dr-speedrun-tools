@@ -1,0 +1,1 @@
+Some shared functionality used between different programs. Mostly boring utility functions
